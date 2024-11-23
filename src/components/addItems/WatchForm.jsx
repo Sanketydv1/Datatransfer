@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, Button, Modal } from 'react-bootstrap';
 import { Formik, Field, Form as FormikForm } from 'formik';
 import AddGemstoneForm from './AddGemstoneForm'; // Assuming you have this form for Gemstone
+import Items from '../items/Items';
 
 const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
   const [watchData, setWatchData] = useState({
-    name: '',
+    items: '',
     purity: '',
     origin: '',
     metal: '',
@@ -31,7 +32,7 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
     console.log("Submitting watch data:", watchData);
     // Send the form data to parent through handleSave
     handleSave(watchData);
-    handleClose(); // Close the form after saving
+    if (handleClose) handleClose(); // Close the form after saving
   };
 
   const handleGemstoneData = (gemstoneData) => {
@@ -140,13 +141,13 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
             {/* Watch Name and Item Type */}
             <Row className="mb-3">
               <Col md={6}>
-                <Form.Group controlId="formname">
+                <Form.Group controlId="formName">
                   <Form.Label>Watch Name</Form.Label>
                   <Field
                     type="text"
-                    name="name"
+                    name="items"
                     className="form-control"
-                    value={watchData.name}
+                    value={watchData.items}
                     onChange={handleInputChange}
                   />
                 </Form.Group>

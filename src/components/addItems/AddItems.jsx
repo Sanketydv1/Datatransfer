@@ -16,12 +16,12 @@ const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
   const handleSaveData = (data) => {
     console.log("Final data received in AddItems:", data);
     handleSave(selectedItemType, data); // Pass selected type and data to parent
-    handleClose(); // Close form after save
+    if (handleClose) handleClose(); // Close form after save, if handleClose exists
   };
 
   const handleFormDataChange = (formData) => {
     setFormData(formData);
-    console.log("Mid-process form data:", formData);
+    console.log("Current form data:", formData);
   };
 
   // Render the correct form based on the selected item type
@@ -32,6 +32,7 @@ const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
           <JewelleryForm
             onFormDataChange={handleFormDataChange}
             handleSave={handleSaveData}
+            handleClose={handleClose} // Pass handleClose to the form
           />
         );
       case "Gemstone":
@@ -39,6 +40,7 @@ const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
           <GemstoneForm
             onFormDataChange={handleFormDataChange}
             handleSave={handleSaveData}
+            handleClose={handleClose} // Pass handleClose to the form
           />
         );
       case "Rudraksh":
@@ -46,6 +48,7 @@ const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
           <RudrakshForm
             onFormDataChange={handleFormDataChange}
             handleSave={handleSaveData}
+            handleClose={handleClose} // Pass handleClose to the form
           />
         );
       case "Watch":
@@ -53,6 +56,7 @@ const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
           <WatchForm
             onFormDataChange={handleFormDataChange}
             handleSave={handleSaveData}
+            handleClose={handleClose} // Pass handleClose to the form
           />
         );
       default:

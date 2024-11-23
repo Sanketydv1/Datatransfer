@@ -5,9 +5,9 @@ import AddItems from "../addItems/AddItems";
 const Items = () => {
   const initialData = {
     mainInventory: [
-      { srno: 1, items: "Jewellery", numbers: "4", group: "group A", description: "....", altcode: "Alt-1", types: "jewellery", date: "12/12/2024" },
-      { srno: 2, items: "Gemstone", numbers: "8", group: "group B", description: "....", altcode: "Alt-2", types: "jewellery", date: "13/12/2024", gemstoneDetails: { color: "Red", carat: "2", clarity: "VVS1" } },
-      { srno: 3, items: "Watch", numbers: "1", group: "group C", description: "....", altcode: "Alt-3", types: "electronics", date: "14/12/2024" },
+      { srno: 1, items: "Jewellery", number: "4", group: "group A", description: "....", altcode: "Alt-1", types: "jewellery", date: "12/12/2024" },
+      { srno: 2, items: "Gemstone", number: "8", group: "group B", description: "....", altcode: "Alt-2", types: "jewellery", date: "13/12/2024", gemstoneDetails: { color: "Red", carat: "2", clarity: "VVS1" } },
+      { srno: 3, items: "Watch", number: "1", group: "group C", description: "....", altcode: "Alt-3", types: "electronics", date: "14/12/2024" },
     ],
   };
 
@@ -19,7 +19,7 @@ const Items = () => {
 
   const [filters, setFilters] = useState({
     items: "",
-    numbers: "",
+    number: "",
     group: "",
     description: "",
     altcode: "",
@@ -35,7 +35,7 @@ const Items = () => {
   const filteredData = inventory.filter((row) => {
     return (
       row.items.toLowerCase().includes(filters.items.toLowerCase()) &&
-      row.numbers.toString().toLowerCase().includes(filters.numbers.toLowerCase()) &&
+      row.number.toString().toLowerCase().includes(filters.number.toLowerCase()) &&
       row.group.toLowerCase().includes(filters.group.toLowerCase()) &&
       row.description.toLowerCase().includes(filters.description.toLowerCase()) &&
       row.altcode.toLowerCase().includes(filters.altcode.toLowerCase()) &&
@@ -48,7 +48,7 @@ const Items = () => {
     const emptyRow = {
       srno: "",
       items: "",
-      numbers: "",
+      number: "",
       group: "",
       description: "",
       altcode: "",
@@ -78,8 +78,9 @@ const Items = () => {
       alert("No data to save.");
       return;
     }
-    const newItem = { ...data, srno: inventory.length + 1, types: type, date: data.entryDateTime, numbers: data.number, items: data.name };
+    const newItem = { ...data, srno: inventory.length + 1, types: type, date: data.entryDateTime };
     setInventory([...inventory, newItem]);
+    console.log('Now data in table ', data)
     alert(`Item saved! Type: ${type}`);
   };
 
@@ -200,7 +201,7 @@ const Items = () => {
         <Table striped bordered hover responsive>
           <thead>
             <tr>
-              {["Sr.no", "Items", "Numbers", "Group", "Description", "Alternative Code", "Types", "Date"].map((header, idx) => (
+              {["Sr.no", "Items", "number", "Group", "Description", "Alternative Code", "Types", "Date"].map((header, idx) => (
                 <th key={idx}>
                   {header}
                   <input
@@ -224,7 +225,7 @@ const Items = () => {
                     {row.items}
                   </Button>
                 </td>
-                <td>{row.numbers}</td>
+                <td>{row.number}</td>
                 <td>{row.group}</td>
                 <td>{row.description}</td>
                 <td>{row.altcode}</td>
