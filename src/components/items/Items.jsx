@@ -78,9 +78,15 @@ const Items = () => {
       alert("No data to save.");
       return;
     }
-    const newItem = { ...data, srno: inventory.length + 1, types: type };
+    const newItem = {
+      ...data,
+      srno: inventory.length + 1,
+      types: type,
+      photos: data.photos, // Store URLs (addresses) instead of actual files
+    };
+
     setInventory([...inventory, newItem]);
-    console.log('Now data in table ', data)
+    console.log('Now data in table ', newItem);
     alert(`Item saved! Type: ${type}`);
   };
 

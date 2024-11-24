@@ -17,6 +17,8 @@ const validationSchema = Yup.object({
   dimensions: Yup.number().positive('dimensions must be positive').required('dimensions is required'),
   items: Yup.string().required('Rudraksh type is required'),
   date: Yup.string().required('Entry date and time are required'),
+
+  photos: Yup.array().min(1, 'At least one photo is required'),
 });
 
 const GemstoneForm = ({ handleSave, handleClose }) => {
@@ -32,7 +34,7 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
     rfidNo: '',
     color: '',
     weight: '',
-    // photos: [],
+    photos: [],
     dimensions: '',
     date: '',
     number: '',
@@ -58,7 +60,7 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <FormikForm>
 
             <Row className="mb-3">
@@ -246,7 +248,7 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
                   <ErrorMessage name="dimensions" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
-              {/* <Col md={6}>
+              <Col md={6}>
                 <Form.Group controlId="formPhotos">
                   <Form.Label>Photos</Form.Label>
                   <input
@@ -255,13 +257,23 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
                     name="photos"
                     onChange={(event) => {
                       const files = event.target.files;
-                      // setFieldValue("photos", Array.from(files));
+
+                      // Filter files based on acceptable types (e.g., JPEG, PNG)
+                      const validFiles = Array.from(files).filter((file) =>
+                        ['image/jpeg', 'image/png'].includes(file.type)
+                      );
+
+                      // Extract only the filenames (or you can use file paths if uploading to a server)
+                      const fileNames = validFiles.map(file => file.name);  // This stores file names like "image.jpg", "photo.png", etc.
+
+                      // Set the file names in the form state
+                      setFieldValue("photos", fileNames);  // Store only the filenames in the form state
                     }}
                     className="form-control"
                   />
                   <ErrorMessage name="photos" component="div" className="text-danger" />
                 </Form.Group>
-              </Col> */}
+              </Col>
             </Row>
 
             {/* RFID text and Entry Date & Time */}
