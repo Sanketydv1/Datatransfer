@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, Button, Modal } from 'react-bootstrap';
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik';
 // import * as Yup from 'yup';
+import { FaTrash } from 'react-icons/fa';
 import AddGemstoneForm from './AddGemstoneForm';
 import AddRudrakshForm from './AddRudrakshForm';
 
@@ -118,7 +119,7 @@ const JewelleryForm = ({ handleSave, handleClose, selectedItemType }) => {
         // validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, setFieldValue, values }) => (
           <FormikForm>
             <Row className="mb-3">
               <Col md={6}>
@@ -377,9 +378,48 @@ const JewelleryForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="file"
                     multiple
                     name="photos"
-                    onChange={(e) => handleFileChange(e)}
+                    accept="image/jpeg, image/png"
+                    onChange={(event) => {
+                      const files = event.target.files;
+                      const validFiles = Array.from(files).filter((file) =>
+                        ['image/jpeg', 'image/png'].includes(file.type)
+                      );
+
+                      // Limit to 4 images
+                      const updatedFiles = validFiles.slice(0, 4 - values.photos.length);
+
+                      // Store file names instead of URLs
+                      const fileNames = updatedFiles.map(file => file.name);
+
+                      // Update the photos in form state with file names
+                      setFieldValue('photos', [...values.photos, ...fileNames]);
+                    }}
                     className="form-control"
                   />
+                  {/* Show Uploaded Images with Delete Icon */}
+                  <div>
+                    {values.photos && values.photos.length > 0 && (
+                      <div className="image-preview-container">
+                        {values.photos.map((photo, index) => (
+                          <div key={index} className="image-preview-item">
+                            <span>{photo}</span> {/* Displaying image name */}
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                // Remove the image from the array
+                                const updatedPhotos = values.photos.filter((_, i) => i !== index);
+                                setFieldValue('photos', updatedPhotos);
+                              }}
+                              className="btn btn-link text-danger mx-5"
+                            >
+                              <FaTrash /> {/* Trash icon */}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                   <ErrorMessage name="photos" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
