@@ -1,9 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, Button, Modal } from 'react-bootstrap';
-import { Formik, Field, Form as FormikForm } from 'formik';
+import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik';
 import AddGemstoneForm from './AddGemstoneForm'; // Assuming you have this form for Gemstone
+import * as Yup from 'yup';
 
-const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
+// Validation schema using Yup
+const validationSchema = Yup.object({
+  size: Yup.string().required('Size is required'),
+  origin: Yup.string().required('Origin is required'),
+  purchasePrice: Yup.number().positive('Purchase price must be positive').required('Purchase price is required'),
+  marketPrice: Yup.number().positive('Market price must be positive').required('Market price is required'),
+  sellingPrice: Yup.number().positive('Selling price must be positive').required('Selling price is required'),
+  stockQuantity: Yup.number().positive('Quantity must be positive').required('Stock quantity is required'),
+  rfidNo: Yup.string().required('RFID number is required'),
+  weight: Yup.number().positive('Weight must be positive').required('Weight is required'),
+  purity: Yup.number().positive('purity must be positive').required('purity is required'),
+  items: Yup.string().required('Rudraksh type is required'),
+  metal: Yup.string().required('metal is required'),
+  date: Yup.string().required('date and time are required'),
+});
+
+const WatchForm = ({ handleSave, handleClose }) => {
   const [watchData, setWatchData] = useState({
     items: '',
     purity: '',
@@ -15,7 +32,7 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
     sellingPrice: '',
     stockQuantity: '',
     weight: '',
-    // photos: [],
+    photos: [],
     rfidNo: '',
     date: '',
     number: '',
@@ -27,11 +44,12 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
   // Manage the modal visibility based on the selection of Gemstone or Rudraksh
   const [showModal, setShowModal] = useState(false);
 
-  const handleSubmit = () => {
-    console.log("Submitting watch data:", watchData);
-    // Send the form data to parent through handleSave
-    handleSave(watchData);
-    if (handleClose) handleClose(); // Close the form after saving
+  const handleSubmit = (values, { setSubmitting }) => {
+    console.log("Submitting watch data:", values);
+    handleSave(values); // Call handleSave with the form data
+    setSubmitting(false); // Set submitting to false once form is done
+    setShowModal(false); // Close modal
+    handleClose(); // Close parent form/modal
   };
 
   const handleGemstoneData = (gemstoneData) => {
@@ -49,20 +67,24 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
     setWatchData(updatedData);
   };
 
-  const handleFileChange = (e) => {
-    setWatchData({
-      ...watchData,
-      photos: Array.from(e.target.files),
-    });
-  };
+  // const handleFileChange = (e) => {
+  //   setWatchData({
+  //     ...watchData,
+  //     photos: Array.from(e.target.files),
+  //   });
+  // };
 
   useEffect(() => {
-    if (watchData.otheritems === 'gemstone' || watchData.otheritems === 'rudraksh') {
-      setShowModal(true); // Show modal when Gemstone or Rudraksh is selected
-    } else {
-      setShowModal(false); // Hide the modal otherwise
+    // Check if watchData exists and has the property otheritems
+    if (watchData && watchData.otheritems) {
+      if (watchData.otheritems === 'gemstone') {
+        setShowModal(true); // Show modal when Gemstone
+      } else {
+        setShowModal(false); // Hide the modal otherwise
+      }
     }
-  }, [watchData.otheritems]); // Depend on `otheritems` value
+  }, [watchData]); // Depend on `watchData` changes
+
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -77,8 +99,9 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
 
       <Formik
         initialValues={watchData}
+        validationSchema={validationSchema}
         onSubmit={handleSubmit}
-        enableReinitialize={true} // Ensures the form updates when `watchData` changes
+
       >
         {({ isSubmitting }) => (
           <FormikForm>
@@ -86,53 +109,34 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formnumber">
                   <Form.Label>Number</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="number"
-                    value={watchData.number}
-                    onChange={handleInputChange}
-                  />
+                  <Field type="number" name="number" className="form-control" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formGroup">
                   <Form.Label>Group</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="group"
-                    value={watchData.group}
-                    onChange={handleInputChange}
-                  >
+                  <Field as="select" name="group" className="form-control">
                     <option value="">Select Group</option>
                     <option value="group1">Group 1</option>
                     <option value="group2">Group 2</option>
                     <option value="group3">Group 3</option>
-                  </Form.Control>
+                  </Field>
                 </Form.Group>
               </Col>
             </Row>
-
             <Row className="mb-3">
               <Col md={6}>
-                <Form.Group controlId="formdescription">
+                <Form.Group controlId="formDescription">
                   <Form.Label>Description</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="description"
-                    value={watchData.description}
-                    onChange={handleInputChange}
-                  />
+                  <Field type="descripton" name="description" className="form-control" />
+
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formAltCode">
                   <Form.Label>Alt Code</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="altcode"
-                    value={watchData.altcode}
-                    onChange={handleInputChange}
-                  />
+                  <Field type="altcode" name="altcode" className="form-control" />
+
                 </Form.Group>
               </Col>
             </Row>
@@ -142,24 +146,14 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formName">
                   <Form.Label>Watch Name</Form.Label>
-                  <Field
-                    type="text"
-                    name="items"
-                    className="form-control"
-                    value={watchData.items}
-                    onChange={handleInputChange}
-                  />
+                  <Field type="items" name="items" className="form-control" />
+                  <ErrorMessage name="items" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formOtherItems">
                   <Form.Label>Gemstone</Form.Label>
-                  <Field
-                    as="select"
-                    name="otheritems"
-                    className="form-control"
-                    onChange={handleInputChange}
-                  >
+                  <Field as="select" name="otheritems" className="form-control" onChange={handleInputChange}>
                     <option value="">Select item</option>
                     <option value="gemstone">Gemstone</option>
                   </Field>
@@ -172,29 +166,21 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formMetal">
                   <Form.Label>Metal</Form.Label>
-                  <Field
-                    as="select"
-                    name="metal"
-                    className="form-control"
-                    onChange={handleInputChange}
-                  >
+                  <Field as="select" name="metal" className="form-control" >
                     <option value="">Select metal</option>
                     <option value="gold">Gold</option>
                     <option value="silver">Silver</option>
                     <option value="brass">Brass</option>
                     <option value="copper">Copper</option>
                   </Field>
+                  <ErrorMessage name="metal" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formPurity">
                   <Form.Label>Purity</Form.Label>
-                  <Field
-                    type="text"
-                    name="purity"
-                    className="form-control"
-                    onChange={handleInputChange}
-                  />
+                  <Field type="number" name="purity" className="form-control" />
+                  <ErrorMessage name="purity" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -204,23 +190,15 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formWeight">
                   <Form.Label>Weight</Form.Label>
-                  <Field
-                    type="text"
-                    name="weight"
-                    className="form-control"
-                    onChange={handleInputChange}
-                  />
+                  <Field type="weight" name="weight" className="form-control" />
+                  <ErrorMessage name="weight" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formStockQuantity">
                   <Form.Label>Stock Quantity</Form.Label>
-                  <Field
-                    type="text"
-                    name="stockQuantity"
-                    className="form-control"
-                    onChange={handleInputChange}
-                  />
+                  <Field type="number" name="stockQuantity" className="form-control" />
+                  <ErrorMessage name="stockQuantity" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -230,23 +208,15 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formPurchasePrice">
                   <Form.Label>Purchase Price</Form.Label>
-                  <Field
-                    type="text"
-                    name="purchasePrice"
-                    className="form-control"
-                    onChange={handleInputChange}
-                  />
+                  <Field type="number" name="purchasePrice" className="form-control" />
+                  <ErrorMessage name="purchasePrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formSellingPrice">
                   <Form.Label>Selling Price</Form.Label>
-                  <Field
-                    type="text"
-                    name="sellingPrice"
-                    className="form-control"
-                    onChange={handleInputChange}
-                  />
+                  <Field type="number" name="sellingPrice" className="form-control" />
+                  <ErrorMessage name="sellingPrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -254,29 +224,19 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
             {/* Entry Date & Photos */}
             <Row className="mb-3">
               <Col md={6}>
-                <Form.Group controlId="formdate">
-                  <Form.Label>Entry Date & Time</Form.Label>
-                  <Field
-                    type="datetime-local"
-                    name="date"
-                    className="form-control"
-                    value={watchData.date}
-                    onChange={handleInputChange}
-                  />
+                <Form.Group controlId="formOrigin">
+                  <Form.Label>Origin</Form.Label>
+                  <Field type="origin" name="origin" className="form-control" />
+                  <ErrorMessage name="origin" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
-              {/* <Col md={6}>
-                <Form.Group controlId="formPhotos">
-                  <Form.Label>Photos</Form.Label>
-                  <input
-                    type="file"
-                    multiple
-                    onChange={(e) => handleFileChange(e)}
-                    className="form-control"
-                  />
-                  <Form.Text className="text-muted">You can upload up to 4 photos, 1 is mandatory.</Form.Text>
+              <Col md={6}>
+                <Form.Group controlId="formdate">
+                  <Form.Label>Entry Date & Time</Form.Label>
+                  <Field type="date" name="date" className="form-control" />
+                  <ErrorMessage name="date" component="div" className="text-danger" />
                 </Form.Group>
-              </Col> */}
+              </Col>
             </Row>
 
             {/* RFID Number */}
@@ -284,12 +244,8 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formRfid">
                   <Form.Label>RFID Number</Form.Label>
-                  <Field
-                    type="text"
-                    name="rfidNo"
-                    className="form-control"
-                    onChange={handleInputChange}
-                  />
+                  <Field type="rfidNo" name="rfidNo" className="form-control" />
+                  <ErrorMessage name="rfidNo" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -307,13 +263,12 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
       </Formik>
 
       {/* Modal for Gemstone / Rudraksh */}
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{watchData.otheritems === 'gemstone' ? 'Gemstone Form' : ''}</Modal.Title>
+          <Modal.Title>Gemstone Form</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {watchData.otheritems === 'gemstone' && <AddGemstoneForm handleGemstoneSubmit={handleGemstoneData} />}
-          {/* Render Rudraksh Form here if needed */}
+          <AddGemstoneForm handleGemstoneSubmit={handleGemstoneData} />
         </Modal.Body>
       </Modal>
     </div>
