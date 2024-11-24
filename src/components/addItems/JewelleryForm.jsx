@@ -14,7 +14,7 @@ import AddRudrakshForm from './AddRudrakshForm';
 //   purchasePrice: Yup.number().positive('Purchase price must be positive').required('Purchase price is required'),
 //   marketPrice: Yup.number().positive('Market price must be positive').required('Market price is required'),
 //   sellingPrice: Yup.number().positive('Selling price must be positive').required('Selling price is required'),
-//   stockQuantity: Yup.number().integer('Quantity must be an integer').min(1, 'Quantity must be greater than 0').required('Stock quantity is required'),
+//   stockQuantity: Yup.number().integer('Quantity must be an integer').min(1, 'Quantity must be greater than 0').required  ('Stock quantity is required'),
 //   rfidNo: Yup.string().required('RFID number is required'),
 //   color: Yup.string().required('Color is required'),
 //   weight: Yup.number().positive('Weight must be positive').required('Weight is required'),

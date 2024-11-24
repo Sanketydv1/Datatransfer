@@ -15,7 +15,7 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
     sellingPrice: '',
     stockQuantity: '',
     weight: '',
-    photos: [],
+    // photos: [],
     rfidNo: '',
     date: '',
     number: '',
@@ -265,7 +265,7 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
                   />
                 </Form.Group>
               </Col>
-              <Col md={6}>
+              {/* <Col md={6}>
                 <Form.Group controlId="formPhotos">
                   <Form.Label>Photos</Form.Label>
                   <input
@@ -274,10 +274,9 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
                     onChange={(e) => handleFileChange(e)}
                     className="form-control"
                   />
-                  {/* <ErrorMessage name="photos" component="div" className="text-danger" /> */}
                   <Form.Text className="text-muted">You can upload up to 4 photos, 1 is mandatory.</Form.Text>
                 </Form.Group>
-              </Col>
+              </Col> */}
             </Row>
 
             {/* RFID Number */}

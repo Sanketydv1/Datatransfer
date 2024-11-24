@@ -148,7 +148,7 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     value={gemstoneData.items}
                     onChange={handleInputChange}
                   />
-                  {/* <ErrorMessage name="items" component="div" className="text-danger" /> */}
+                  {/* <ErrorMessage name="name" component="div" className="text-danger" /> */}
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -308,7 +308,10 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="file"
                     multiple
                     name="photos"
-                    onChange={(e) => handleFileChange(e)}
+                    onChange={(event) => {
+                      const files = event.target.files;
+                      // setFieldValue("photos", Array.from(files));
+                    }}
                     className="form-control"
                   />
                   <ErrorMessage name="photos" component="div" className="text-danger" />
@@ -325,10 +328,10 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="datetime-local"
                     name="date"
                     className="form-control"
-                    value={gemstoneData.entryDateTime}
+                    value={gemstoneData.date}
                     onChange={handleInputChange}
                   />
-                  {/* <ErrorMessage name="date" component="div" className="text-danger" /> */}
+                  {/* <ErrorMessage name="entryDateTime" component="div" className="text-danger" /> */}
                 </Form.Group>
               </Col>
               <Col md={6}>
