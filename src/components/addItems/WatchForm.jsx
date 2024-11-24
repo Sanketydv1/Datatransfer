@@ -232,6 +232,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
 
             {/* RFID Number */}
             <Row className="mb-3">
+        
               <Col md={6}>
                 <Form.Group controlId="formRfid">
                   <Form.Label>RFID Number</Form.Label>

@@ -17,6 +17,7 @@ const validationSchema = Yup.object({
   weight: Yup.number().positive('Weight must be positive').required('Weight is required'),
   items: Yup.string().required('Rudraksh type is required'),
   date: Yup.string().required('Entry date and time are required'),
+  photos: Yup.array().min(1, 'At least one photo is required'),
 });
 
 const RudrakshForm = ({ handleSave, handleClose }) => {
@@ -38,6 +39,7 @@ const RudrakshForm = ({ handleSave, handleClose }) => {
     group: '',
     description: '',
     altcode: '',
+    photos: [],
   };
 
   const handleSubmit = (values) => {
@@ -53,7 +55,7 @@ const RudrakshForm = ({ handleSave, handleClose }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <FormikForm>
             <Row className="mb-3">
               <Col md={6}>
@@ -195,6 +197,32 @@ const RudrakshForm = ({ handleSave, handleClose }) => {
                   <Form.Label>Entry Date & Time</Form.Label>
                   <Field type="date" name="date" className="form-control" />
                   <ErrorMessage name="date" component="div" className="text-danger" />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="formPhotos">
+                  <Form.Label>Photos</Form.Label>
+                  <input
+                    type="file"
+                    multiple
+                    name="photos"
+                    onChange={(event) => {
+                      const files = event.target.files;
+
+                      // Filter files based on acceptable types (e.g., JPEG, PNG)
+                      const validFiles = Array.from(files).filter((file) =>
+                        ['image/jpeg', 'image/png'].includes(file.type)
+                      );
+
+                      // Extract only the filenames (or you can use file paths if uploading to a server)
+                      const fileNames = validFiles.map(file => file.name);  // This stores file names like "image.jpg", "photo.png", etc.
+
+                      // Set the file names in the form state
+                      setFieldValue("photos", fileNames);  // Store only the filenames in the form state
+                    }}
+                    className="form-control"
+                  />
+                  <ErrorMessage name="photos" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
