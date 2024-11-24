@@ -5,18 +5,18 @@ import * as Yup from 'yup';
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
-  // unitPrice: Yup.number().positive('Price must be positive').required('Unit price is required'),
-  // size: Yup.string().required('Size is required'),
-  // origin: Yup.string().required('Origin is required'),
-  // purchasePrice: Yup.number().positive('Purchase price must be positive').required('Purchase price is required'),
-  // marketPrice: Yup.number().positive('Market price must be positive').required('Market price is required'),
-  // sellingPrice: Yup.number().positive('Selling price must be positive').required('Selling price is required'),
-  // stockQuantity: Yup.number().positive('Quantity must be positive').required('Stock quantity is required'),
-  // rfidNo: Yup.string().required('RFID number is required'),
-  // color: Yup.string().required('Color is required'),
-  // weight: Yup.number().positive('Weight must be positive').required('Weight is required'),
+  unitPrice: Yup.number().positive('Price must be positive').required('Unit price is required'),
+  size: Yup.string().required('Size is required'),
+  origin: Yup.string().required('Origin is required'),
+  purchasePrice: Yup.number().positive('Purchase price must be positive').required('Purchase price is required'),
+  marketPrice: Yup.number().positive('Market price must be positive').required('Market price is required'),
+  sellingPrice: Yup.number().positive('Selling price must be positive').required('Selling price is required'),
+  stockQuantity: Yup.number().positive('Quantity must be positive').required('Stock quantity is required'),
+  rfidNo: Yup.string().required('RFID number is required'),
+  color: Yup.string().required('Color is required'),
+  weight: Yup.number().positive('Weight must be positive').required('Weight is required'),
   items: Yup.string().required('Rudraksh type is required'),
-  // date: Yup.string().required('Entry date and time are required'),
+  date: Yup.string().required('Entry date and time are required'),
 });
 
 const RudrakshForm = ({ handleSave, handleClose }) => {
@@ -60,7 +60,7 @@ const RudrakshForm = ({ handleSave, handleClose }) => {
                 <Form.Group controlId="formnumber">
                   <Form.Label>Number</Form.Label>
                   <Field type="number" name="number" className="form-control" />
-                  <ErrorMessage name="number" component="div" className="text-danger" />
+
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -72,7 +72,7 @@ const RudrakshForm = ({ handleSave, handleClose }) => {
                     <option value="group2">Group 2</option>
                     <option value="group3">Group 3</option>
                   </Field>
-                  <ErrorMessage name="group" component="div" className="text-danger" />
+
                 </Form.Group>
               </Col>
             </Row>
@@ -81,14 +81,14 @@ const RudrakshForm = ({ handleSave, handleClose }) => {
                 <Form.Group controlId="formDescription">
                   <Form.Label>Description</Form.Label>
                   <Field type="descripton" name="description" className="form-control" />
-                  <ErrorMessage name="description" component="div" className="text-danger" />
+
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formAltCode">
                   <Form.Label>Alt Code</Form.Label>
                   <Field type="altcode" name="altcode" className="form-control" />
-                  <ErrorMessage name="altcode" component="div" className="text-danger" />
+
                 </Form.Group>
               </Col>
             </Row>
