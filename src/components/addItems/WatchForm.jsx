@@ -21,7 +21,7 @@ const validationSchema = Yup.object({
 });
 
 const WatchForm = ({ handleSave, handleClose }) => {
-  const [watchData, setWatchData] = useState({
+  const initialValues = {
     items: '',
     purity: '',
     origin: '',
@@ -39,17 +39,15 @@ const WatchForm = ({ handleSave, handleClose }) => {
     group: '',
     description: '',
     altcode: '',
-  });
+  };
 
-  // Manage the modal visibility based on the selection of Gemstone or Rudraksh
   const [showModal, setShowModal] = useState(false);
+  const [watchData, setWatchData] = useState()
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values) => {
     console.log("Submitting watch data:", values);
-    handleSave(values); // Call handleSave with the form data
-    setSubmitting(false); // Set submitting to false once form is done
-    setShowModal(false); // Close modal
-    handleClose(); // Close parent form/modal
+    handleSave(values);
+    handleClose(); // Close the form after saving
   };
 
   const handleGemstoneData = (gemstoneData) => {
@@ -66,13 +64,6 @@ const WatchForm = ({ handleSave, handleClose }) => {
     const updatedData = { ...watchData, [name]: value };
     setWatchData(updatedData);
   };
-
-  // const handleFileChange = (e) => {
-  //   setWatchData({
-  //     ...watchData,
-  //     photos: Array.from(e.target.files),
-  //   });
-  // };
 
   useEffect(() => {
     // Check if watchData exists and has the property otheritems
@@ -98,7 +89,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
     <div className="dynamic-fields">
 
       <Formik
-        initialValues={watchData}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
 
@@ -263,12 +254,13 @@ const WatchForm = ({ handleSave, handleClose }) => {
       </Formik>
 
       {/* Modal for Gemstone / Rudraksh */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Gemstone Form</Modal.Title>
+          <Modal.Title>{watchData.otheritems === 'gemstone' ? 'Gemstone Form' : ''}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddGemstoneForm handleGemstoneSubmit={handleGemstoneData} />
+          {watchData.otheritems === 'gemstone' && <AddGemstoneForm handleGemstoneSubmit={handleGemstoneData} />}
+          {/* Render Rudraksh Form here if needed */}
         </Modal.Body>
       </Modal>
     </div>

@@ -88,7 +88,7 @@ const RudrakshForm = ({ handleSave, handleClose }) => {
                 <Form.Group controlId="formAltCode">
                   <Form.Label>Alt Code</Form.Label>
                   <Field type="altcode" name="altcode" className="form-control" />
-
+                  <ErrorMessage name="altcode" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -135,7 +135,11 @@ const RudrakshForm = ({ handleSave, handleClose }) => {
               <Col md={6}>
                 <Form.Group controlId="formColor">
                   <Form.Label>Color</Form.Label>
-                  <Field type="color" name="color" className="form-control" />
+                  <Field
+                    type="text"
+                    name="color"
+                    className="form-control"
+                  />
                   <ErrorMessage name="color" component="div" className="text-danger" />
                 </Form.Group>
               </Col>

@@ -3,26 +3,24 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-// Define the validation schema using Yup
-// const validationSchema = Yup.object({
-//   name: Yup.string().required('Gemstone name is required'),
-//   unitPrice: Yup.number().positive('Price must be positive').required('Unit price is required'),
-//   size: Yup.string().required('Size is required'),
-//   origin: Yup.string().required('Origin is required'),
-//   purchasePrice: Yup.number().positive('Purchase price must be positive').required('Purchase price is required'),
-//   marketPrice: Yup.number().positive('Market price must be positive').required('Market price is required'),
-//   sellingPrice: Yup.number().positive('Selling price must be positive').required('Selling price is required'),
-//   stockQuantity: Yup.number().integer('Quantity must be an integer').min(1, 'Quantity must be greater than 0').required('Stock quantity is required'),
-//   rfidNo: Yup.string().required('RFID number is required'),
-//   color: Yup.string().required('Color is required'),
-//   weight: Yup.number().positive('Weight must be positive').required('Weight is required'),
-//   // photos: Yup.array().min(1, 'At least one photo is required'),
-//   dimensions: Yup.string().required('Dimensions are required'),
-//   entryDateTime: Yup.string().required('Entry date and time is required'),
-// });
+const validationSchema = Yup.object({
+  unitPrice: Yup.number().positive('Price must be positive').required('Unit price is required'),
+  size: Yup.string().required('Size is required'),
+  origin: Yup.string().required('Origin is required'),
+  purchasePrice: Yup.number().positive('Purchase price must be positive').required('Purchase price is required'),
+  marketPrice: Yup.number().positive('Market price must be positive').required('Market price is required'),
+  sellingPrice: Yup.number().positive('Selling price must be positive').required('Selling price is required'),
+  stockQuantity: Yup.number().positive('Quantity must be positive').required('Stock quantity is required'),
+  rfidNo: Yup.string().required('RFID number is required'),
+  color: Yup.string().required('Color is required'),
+  weight: Yup.number().positive('Weight must be positive').required('Weight is required'),
+  dimensions: Yup.number().positive('dimensions must be positive').required('dimensions is required'),
+  items: Yup.string().required('Rudraksh type is required'),
+  date: Yup.string().required('Entry date and time are required'),
+});
 
-const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
-  const [gemstoneData, setGemstoneData] = useState({
+const GemstoneForm = ({ handleSave, handleClose }) => {
+  const initialValues = {
     items: '',
     unitPrice: '',
     size: '',
@@ -34,36 +32,19 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
     rfidNo: '',
     color: '',
     weight: '',
-    photos: [],
-    otheritems: '',
+    // photos: [],
     dimensions: '',
     date: '',
     number: '',
     group: '',
     description: '',
     altcode: '',
-  });
-
-  const handleFileChange = (e) => {
-    setGemstoneData({
-      ...gemstoneData,
-      photos: Array.from(e.target.files),
-    });
   };
 
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setGemstoneData({
-      ...gemstoneData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = () => {
-    console.log(gemstoneData);
+  const handleSubmit = (values) => {
+    console.log('gemstone is submitted', values);
     // Send the form data to parent through handleSave
-    handleSave(gemstoneData);
+    handleSave(values);
     handleClose(); // Close the form after saving
   };
 
@@ -73,8 +54,8 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
     <div className="dynamic-fields">
 
       <Formik
-        initialValues={gemstoneData}
-        // validationSchema={validationSchema}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
@@ -84,57 +65,37 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formnumber">
                   <Form.Label>Number</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="number"
-                    value={gemstoneData.number}
-                    onChange={handleInputChange}
-                  />
+                  <Field type="number" name="number" className="form-control" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formGroup">
                   <Form.Label>Group</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="group"
-                    value={gemstoneData.group}
-                    onChange={handleInputChange}
-                  >
+                  <Field as="select" name="group" className="form-control">
                     <option value="">Select Group</option>
                     <option value="group1">Group 1</option>
                     <option value="group2">Group 2</option>
                     <option value="group3">Group 3</option>
-                  </Form.Control>
+                  </Field>
                 </Form.Group>
               </Col>
             </Row>
-
             <Row className="mb-3">
               <Col md={6}>
-                <Form.Group controlId="formdescription">
+                <Form.Group controlId="formDescription">
                   <Form.Label>Description</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="description"
-                    value={gemstoneData.description}
-                    onChange={handleInputChange}
-                  />
+                  <Field type="descripton" name="description" className="form-control" />
+
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formAltCode">
                   <Form.Label>Alt Code</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="altcode"
-                    value={gemstoneData.altcode}
-                    onChange={handleInputChange}
-                  />
+                  <Field type="altcode" name="altcode" className="form-control" />
+
                 </Form.Group>
               </Col>
             </Row>
-
 
             {/* Gemstone Details */}
             <Row className="mb-3">
@@ -145,10 +106,8 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="items"
                     className="form-control"
-                    value={gemstoneData.items}
-                    onChange={handleInputChange}
                   />
-                  {/* <ErrorMessage name="name" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="items" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -158,10 +117,8 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="unitPrice"
                     className="form-control"
-                    value={gemstoneData.unitPrice}
-                    onChange={handleInputChange}
                   />
-                  {/* <ErrorMessage name="unitPrice" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="unitPrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -175,10 +132,8 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="size"
                     className="form-control"
-                    value={gemstoneData.size}
-                    onChange={handleInputChange}
                   />
-                  {/* <ErrorMessage name="size" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="size" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -188,10 +143,8 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="weight"
                     className="form-control"
-                    value={gemstoneData.weight}
-                    onChange={handleInputChange}
                   />
-                  {/* <ErrorMessage name="weight" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="weight" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -205,10 +158,9 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="color"
                     className="form-control"
-                    value={gemstoneData.color}
-                    onChange={handleInputChange}
+
                   />
-                  {/* <ErrorMessage name="color" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="color" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -218,10 +170,9 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="stockQuantity"
                     className="form-control"
-                    value={gemstoneData.stockQuantity}
-                    onChange={handleInputChange}
+
                   />
-                  {/* <ErrorMessage name="stockQuantity" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="stockQuantity" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -235,10 +186,9 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="purchasePrice"
                     className="form-control"
-                    value={gemstoneData.purchasePrice}
-                    onChange={handleInputChange}
+
                   />
-                  {/* <ErrorMessage name="purchasePrice" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="purchasePrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -248,10 +198,9 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="marketPrice"
                     className="form-control"
-                    value={gemstoneData.marketPrice}
-                    onChange={handleInputChange}
+
                   />
-                  {/* <ErrorMessage name="marketPrice" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="marketPrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -265,10 +214,8 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="sellingPrice"
                     className="form-control"
-                    value={gemstoneData.sellingPrice}
-                    onChange={handleInputChange}
                   />
-                  {/* <ErrorMessage name="sellingPrice" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="sellingPrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -278,10 +225,9 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="origin"
                     className="form-control"
-                    value={gemstoneData.origin}
-                    onChange={handleInputChange}
+
                   />
-                  {/* <ErrorMessage name="origin" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="origin" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -295,13 +241,12 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="dimensions"
                     className="form-control"
-                    value={gemstoneData.dimensions}
-                    onChange={handleInputChange}
+
                   />
-                  {/* <ErrorMessage name="dimensions" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="dimensions" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
-              <Col md={6}>
+              {/* <Col md={6}>
                 <Form.Group controlId="formPhotos">
                   <Form.Label>Photos</Form.Label>
                   <input
@@ -316,7 +261,7 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                   />
                   <ErrorMessage name="photos" component="div" className="text-danger" />
                 </Form.Group>
-              </Col>
+              </Col> */}
             </Row>
 
             {/* RFID text and Entry Date & Time */}
@@ -328,10 +273,9 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="datetime-local"
                     name="date"
                     className="form-control"
-                    value={gemstoneData.date}
-                    onChange={handleInputChange}
+
                   />
-                  {/* <ErrorMessage name="entryDateTime" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="date" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -341,10 +285,9 @@ const GemstoneForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="text"
                     name="rfidNo"
                     className="form-control"
-                    value={gemstoneData.rfidNo}
-                    onChange={handleInputChange}
+
                   />
-                  {/* <ErrorMessage name="rfidNo" component="div" className="text-danger" /> */}
+                  <ErrorMessage name="rfidNo" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
