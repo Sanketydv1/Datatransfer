@@ -27,7 +27,7 @@ const JewelleryForm = ({ handleSave, handleClose, selectedItemType }) => {
   const [gemstoneData, setGemstoneData] = useState()
   const [rudrakshData, setRudrakshData] = useState()
   const [jewelleryData, setJewelleryData] = useState({
-    name: '',
+    items: '',
     unitPrice: '',
     size: '',
     origin: '',
@@ -43,7 +43,7 @@ const JewelleryForm = ({ handleSave, handleClose, selectedItemType }) => {
     photos: [],
     otheritems: '',
     dimensions: '',
-    entryDateTime: '',
+    date: '',
     number: '',
     group: '',
     description: '',
@@ -181,12 +181,12 @@ const JewelleryForm = ({ handleSave, handleClose, selectedItemType }) => {
                   <Form.Label>Jewellery Name</Form.Label>
                   <Field
                     type="text"
-                    name="name"
+                    name="items"
                     className="form-control"
                     value={jewelleryData.name}
                     onChange={handleInputChange}
                   />
-                  {/* <ErrorMessage name="name" component="div" className="text-danger" /> */}
+                  {/* <ErrorMessage name="items" component="div" className="text-danger" /> */}
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -362,12 +362,12 @@ const JewelleryForm = ({ handleSave, handleClose, selectedItemType }) => {
                   <Form.Label>Entry Date & Time</Form.Label>
                   <Field
                     type="datetime-local"
-                    name="entryDateTime"
+                    name="date"
                     className="form-control"
                     value={jewelleryData.entryDateTime}
                     onChange={handleInputChange}
                   />
-                  {/* <ErrorMessage name="entryDate" component="div" className="text-danger" /> */}
+                  {/* <ErrorMessage name="date" component="div" className="text-danger" /> */}
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -377,10 +377,7 @@ const JewelleryForm = ({ handleSave, handleClose, selectedItemType }) => {
                     type="file"
                     multiple
                     name="photos"
-                    onChange={(event) => {
-                      const files = event.target.files;
-                      // handleFileChange("photos", Array.from(files));           // it gives error write something else in place of handleFileChange
-                    }}
+                    onChange={(e) => handleFileChange(e)}
                     className="form-control"
                   />
                   <ErrorMessage name="photos" component="div" className="text-danger" />

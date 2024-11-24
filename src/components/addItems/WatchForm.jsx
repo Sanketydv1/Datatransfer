@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, Button, Modal } from 'react-bootstrap';
 import { Formik, Field, Form as FormikForm } from 'formik';
 import AddGemstoneForm from './AddGemstoneForm'; // Assuming you have this form for Gemstone
-import Items from '../items/Items';
 
 const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
   const [watchData, setWatchData] = useState({
@@ -18,7 +17,7 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
     weight: '',
     photos: [],
     rfidNo: '',
-    entryDateTime: '',
+    date: '',
     number: '',
     group: '',
     description: '',
@@ -255,13 +254,13 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
             {/* Entry Date & Photos */}
             <Row className="mb-3">
               <Col md={6}>
-                <Form.Group controlId="formEntryDateTime">
+                <Form.Group controlId="formdate">
                   <Form.Label>Entry Date & Time</Form.Label>
                   <Field
                     type="datetime-local"
-                    name="entryDateTime"
+                    name="date"
                     className="form-control"
-                    value={watchData.entryDateTime}
+                    value={watchData.date}
                     onChange={handleInputChange}
                   />
                 </Form.Group>
@@ -275,6 +274,8 @@ const WatchForm = ({ handleSave, handleClose, selectedItemType }) => {
                     onChange={(e) => handleFileChange(e)}
                     className="form-control"
                   />
+                  {/* <ErrorMessage name="photos" component="div" className="text-danger" /> */}
+                  <Form.Text className="text-muted">You can upload up to 4 photos, 1 is mandatory.</Form.Text>
                 </Form.Group>
               </Col>
             </Row>

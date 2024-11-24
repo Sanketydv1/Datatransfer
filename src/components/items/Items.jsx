@@ -78,7 +78,7 @@ const Items = () => {
       alert("No data to save.");
       return;
     }
-    const newItem = { ...data, srno: inventory.length + 1, types: type, date: data.entryDateTime };
+    const newItem = { ...data, srno: inventory.length + 1, types: type };
     setInventory([...inventory, newItem]);
     console.log('Now data in table ', data)
     alert(`Item saved! Type: ${type}`);
@@ -221,9 +221,15 @@ const Items = () => {
               <tr key={index}>
                 <td>{row.srno}</td>
                 <td>
-                  <Button variant=" " className="text-primary" onClick={() => handleItemClick(row)}>
-                    {row.items}
-                  </Button>
+                  {/* Check if the item has data before showing the button */}
+                  {row.items ? (
+                    <Button variant=" " className="text-primary" onClick={() => handleItemClick(row)}>
+                      {row.items}
+                    </Button>
+                  ) : (
+                    // If row is empty, show an empty space or keep it blank
+                    <span>-</span>
+                  )}
                 </td>
                 <td>{row.number}</td>
                 <td>{row.group}</td>
@@ -232,7 +238,8 @@ const Items = () => {
                 <td>{row.types}</td>
                 <td>{row.date}</td>
                 <td>
-                  {row.srno !== "--" && (
+                  {/* Only show actions if the row has a valid srno (i.e., it's not an empty row) */}
+                  {row.srno && row.items !== '-' && (
                     <DropdownButton variant="primary" title="Actions" id={`actions-dropdown-${row.srno}`}>
                       <Dropdown.Item onClick={() => handleEditItem(row)}>Edit</Dropdown.Item>
                       <Dropdown.Item onClick={() => handleDeleteItem(row)}>Delete</Dropdown.Item>

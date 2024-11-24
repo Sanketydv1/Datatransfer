@@ -22,7 +22,7 @@ import * as Yup from 'yup';
 
 const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
   const [rudrakshData, setRudrakshData] = useState({
-    name: '',
+    items: '',
     size: '',
     origin: '',
     purchasePrice: '',
@@ -34,7 +34,7 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
     color: '',
     weight: '',
     photos: [],
-    entryDateTime: '',
+    date: '',
     number: '',
     group: '',
     description: '',
@@ -131,15 +131,15 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
 
             <Row className="mb-3">
               <Col md={6}>
-                <Form.Group controlId="formname">
+                <Form.Group controlId="formItems">
                   <Form.Label>Rudraksh Type</Form.Label>
                   <Form.Control
-                  as="select"
-                  name="name" 
-                  className="form-control"
-                  value={rudrakshData.name}
-                  onChange={handleInputChange}
-                  > 
+                    as="select"
+                    name="items"
+                    className="form-control"
+                    value={rudrakshData.items}
+                    onChange={handleInputChange}
+                  >
 
                     <option value="">Select type</option>
                     <option value="1 Mukhi">1 Mukhi</option>
@@ -152,11 +152,11 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formUnitPrice">
                   <Form.Label>Unit Price</Form.Label>
-                  <Field type="text" 
-                  name="unitPrice" 
-                  className="form-control" 
-                  value={rudrakshData.unitPrice}
-                  onChange={handleInputChange}
+                  <Field type="text"
+                    name="unitPrice"
+                    className="form-control"
+                    value={rudrakshData.unitPrice}
+                    onChange={handleInputChange}
                   />
                   {/* <ErrorMessage name="unitPrice" component="div" className="text-danger" /> */}
                 </Form.Group>
@@ -168,24 +168,24 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formSize">
                   <Form.Label>Size</Form.Label>
-                  <Field type="text" 
-                  name="size" 
-                  className="form-control"
-                  value={rudrakshData.size}
-                  onChange={handleInputChange}
-                   />
+                  <Field type="text"
+                    name="size"
+                    className="form-control"
+                    value={rudrakshData.size}
+                    onChange={handleInputChange}
+                  />
                   {/* <ErrorMessage name="size" component="div" className="text-danger" /> */}
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formWeight">
                   <Form.Label>Weight</Form.Label>
-                  <Field type="text" 
-                  name="weight" 
-                  className="form-control"
-                  value={rudrakshData.weights}
+                  <Field type="text"
+                    name="weight"
+                    className="form-control"
+                    value={rudrakshData.weights}
                     onChange={handleInputChange}
-                   />
+                  />
                   {/* <ErrorMessage name="weight" component="div" className="text-danger" /> */}
                 </Form.Group>
               </Col>
@@ -197,11 +197,11 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
                 <Form.Group controlId="formColor">
                   <Form.Label>Color</Form.Label>
                   <Field type="text"
-                   name="color"
-                   className="form-control"
-                   value={rudrakshData.color}
+                    name="color"
+                    className="form-control"
+                    value={rudrakshData.color}
                     onChange={handleInputChange}
-                    />
+                  />
                   {/* <ErrorMessage name="color" component="div" className="text-danger" /> */}
                 </Form.Group>
               </Col>
@@ -209,11 +209,11 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
                 <Form.Group controlId="formStockQuantity">
                   <Form.Label>Stock Quantity</Form.Label>
                   <Field type="text"
-                   name="stockQuantity"
+                    name="stockQuantity"
                     className="form-control"
                     value={rudrakshData.stockQuantity}
                     onChange={handleInputChange}
-                     />
+                  />
                   {/* <ErrorMessage name="stockQuantity" component="div" className="text-danger" /> */}
                 </Form.Group>
               </Col>
@@ -225,9 +225,9 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
                 <Form.Group controlId="formPurchasePrice">
                   <Form.Label>Purchase Price</Form.Label>
                   <Field type="text" name="purchasePrice" className="form-control"
-                     value={rudrakshData.purchasePrice}
-                     onChange={handleInputChange}
-                  
+                    value={rudrakshData.purchasePrice}
+                    onChange={handleInputChange}
+
                   />
                   {/* <ErrorMessage name="purchasePrice" component="div" className="text-danger" /> */}
                 </Form.Group>
@@ -260,8 +260,8 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
                 <Form.Group controlId="formOrigin">
                   <Form.Label>Origin</Form.Label>
                   <Field type="text" name="origin" className="form-control"
-                      value={rudrakshData.origin}
-                      onChange={handleInputChange}
+                    value={rudrakshData.origin}
+                    onChange={handleInputChange}
                   />
                   {/* <ErrorMessage name="origin" component="div" className="text-danger" /> */}
                 </Form.Group>
@@ -273,9 +273,9 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formEntryDateTime">
                   <Form.Label>Entry Date & Time</Form.Label>
-                  <Field type="datetime-local" name="entryDateTime" className="form-control"
-                      value={rudrakshData.entryDateTime}
-                      onChange={handleInputChange}
+                  <Field type="datetime-local" name="date" className="form-control"
+                    value={rudrakshData.entryDateTime}
+                    onChange={handleInputChange}
                   />
                   {/* <ErrorMessage name="entryDateTime" component="div" className="text-danger" /> */}
                 </Form.Group>
@@ -286,10 +286,7 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
                   <input
                     type="file"
                     multiple
-                    onChange={(event) => {
-                      const files = event.target.files;
-                      // setFieldValue('photos', Array.from(files));
-                    }}
+                    onChange={(e) => handleFileChange(e)}
                     className="form-control"
                   />
                   {/* <ErrorMessage name="photos" component="div" className="text-danger" /> */}
@@ -303,9 +300,9 @@ const RudrakshForm = ({ handleSave, handleClose, selectedItemType }) => {
               <Col md={6}>
                 <Form.Group controlId="formRfidNo">
                   <Form.Label>RFID Number</Form.Label>
-                  <Field type="text" name="rfidNo" className="form-control" 
-                     value={rudrakshData.rfidNo}
-                     onChange={handleInputChange}
+                  <Field type="text" name="rfidNo" className="form-control"
+                    value={rudrakshData.rfidNo}
+                    onChange={handleInputChange}
                   />
                   {/* <ErrorMessage name="rfidNo" component="div" className="text-danger" /> */}
                 </Form.Group>
