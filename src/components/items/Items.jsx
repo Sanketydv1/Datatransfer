@@ -3,15 +3,7 @@ import { Table, Button, Container, DropdownButton, Dropdown, Modal, Form, Row, C
 import AddItems from "../addItems/AddItems";
 
 const Items = () => {
-  const initialData = {
-    mainInventory: [
-      { srno: 1, items: "Jewellery", number: "4", group: "group A", description: "....", altcode: "Alt-1", types: "jewellery", date: "12/12/2024" },
-      { srno: 2, items: "Gemstone", number: "8", group: "group B", description: "....", altcode: "Alt-2", types: "jewellery", date: "13/12/2024", gemstoneDetails: { color: "Red", carat: "2", clarity: "VVS1" } },
-      { srno: 3, items: "Watch", number: "1", group: "group C", description: "....", altcode: "Alt-3", types: "electronics", date: "14/12/2024" },
-    ],
-  };
-
-  const [inventory, setInventory] = useState(initialData.mainInventory);
+  const [inventory, setInventory] = useState([]);  // Start with an empty inventory
   const [selectedItemType, setSelectedItemType] = useState("");
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
@@ -44,7 +36,7 @@ const Items = () => {
     );
   });
 
-  const addEmptyRows = (data, rowCount = 8) => {
+  const addEmptyRows = (data, rowCount = 16) => {
     const emptyRow = {
       srno: "",
       items: "",
@@ -86,7 +78,6 @@ const Items = () => {
     };
 
     setInventory([...inventory, newItem]);
-    console.log('Now data in table ', newItem);
     alert(`Item saved! Type: ${type}`);
   };
 
@@ -155,7 +146,7 @@ const Items = () => {
       const entries = Object.entries(details);
       return (
         <>
-          <h5 className="mt-4">Gemstone Details</h5>
+          <h5 className="mt-4">Gemstone/Rudraksh Details</h5>
           <Row>
             {entries.map(([key, value], index) => (
               <Col md={6} className="mb-3" key={index}>
@@ -168,7 +159,7 @@ const Items = () => {
                       onChange={(e) =>
                         setCurrentItem({
                           ...currentItem,
-                          gemstoneDetails: { ...currentItem.gemstoneDetails, [key]: e.target.value },
+                          gemstoneDetails: { ...currentItem.gemstoneDetails, [key]: e.target.value }
                         })
                       }
                     />
@@ -203,7 +194,7 @@ const Items = () => {
 
   const renderTable = (data) => {
     return (
-      <div style={{ maxHeight: "400px", overflowY: "auto" }}>
+      <div style={{ minHeight: "600px", overflowY: "auto" }}>
         <Table striped bordered hover responsive>
           <thead>
             <tr>
@@ -227,13 +218,11 @@ const Items = () => {
               <tr key={index}>
                 <td>{row.srno}</td>
                 <td>
-                  {/* Check if the item has data before showing the button */}
                   {row.items ? (
                     <Button variant=" " className="text-primary" onClick={() => handleItemClick(row)}>
                       {row.items}
                     </Button>
                   ) : (
-                    // If row is empty, show an empty space or keep it blank
                     <span>-</span>
                   )}
                 </td>
@@ -244,7 +233,6 @@ const Items = () => {
                 <td>{row.types}</td>
                 <td>{row.date}</td>
                 <td>
-                  {/* Only show actions if the row has a valid srno (i.e., it's not an empty row) */}
                   {row.srno && row.items !== '-' && (
                     <DropdownButton variant="primary" title="Actions" id={`actions-dropdown-${row.srno}`}>
                       <Dropdown.Item onClick={() => handleEditItem(row)}>Edit</Dropdown.Item>

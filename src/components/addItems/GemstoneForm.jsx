@@ -15,10 +15,9 @@ const validationSchema = Yup.object({
   rfidNo: Yup.string().required('RFID number is required'),
   color: Yup.string().required('Color is required'),
   weight: Yup.number().positive('Weight must be positive').required('Weight is required'),
-  dimensions: Yup.number().positive('dimensions must be positive').required('dimensions is required'),
-  items: Yup.string().required('Rudraksh type is required'),
+  dimensions: Yup.number().positive('Dimensions must be positive').required('Dimensions are required'),
+  items: Yup.string().required('Gemstone name is required'),
   date: Yup.string().required('Entry date and time are required'),
-
   photos: Yup.array().min(1, 'At least one photo is required'),
 });
 
@@ -45,17 +44,13 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
   };
 
   const handleSubmit = (values) => {
-    console.log('gemstone is submitted', values);
-    // Send the form data to parent through handleSave
+    console.log("Submitting gemstone data:", values);
     handleSave(values);
-    handleClose(); // Close the form after saving
+    handleClose();
   };
-
-
 
   return (
     <div className="dynamic-fields">
-
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -63,7 +58,7 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
       >
         {({ isSubmitting, setFieldValue, values }) => (
           <FormikForm>
-
+            {/* Number and Group */}
             <Row className="mb-3">
               <Col md={6}>
                 <Form.Group controlId="formnumber">
@@ -83,19 +78,19 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
                 </Form.Group>
               </Col>
             </Row>
+
+            {/* Description and AltCode */}
             <Row className="mb-3">
               <Col md={6}>
                 <Form.Group controlId="formDescription">
                   <Form.Label>Description</Form.Label>
-                  <Field type="descripton" name="description" className="form-control" />
-
+                  <Field type="text" name="description" className="form-control" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formAltCode">
                   <Form.Label>Alt Code</Form.Label>
-                  <Field type="altcode" name="altcode" className="form-control" />
-
+                  <Field type="text" name="altcode" className="form-control" />
                 </Form.Group>
               </Col>
             </Row>
@@ -105,22 +100,14 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
               <Col md={6}>
                 <Form.Group controlId="formGemstoneName">
                   <Form.Label>Gemstone Name</Form.Label>
-                  <Field
-                    type="text"
-                    name="items"
-                    className="form-control"
-                  />
+                  <Field type="text" name="items" className="form-control" />
                   <ErrorMessage name="items" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formUnitPrice">
                   <Form.Label>Unit Price</Form.Label>
-                  <Field
-                    type="text"
-                    name="unitPrice"
-                    className="form-control"
-                  />
+                  <Field type="number" name="unitPrice" className="form-control" />
                   <ErrorMessage name="unitPrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
@@ -131,22 +118,14 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
               <Col md={6}>
                 <Form.Group controlId="formSize">
                   <Form.Label>Size</Form.Label>
-                  <Field
-                    type="text"
-                    name="size"
-                    className="form-control"
-                  />
+                  <Field type="text" name="size" className="form-control" />
                   <ErrorMessage name="size" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formWeight">
                   <Form.Label>Weight</Form.Label>
-                  <Field
-                    type="text"
-                    name="weight"
-                    className="form-control"
-                  />
+                  <Field type="number" name="weight" className="form-control" />
                   <ErrorMessage name="weight" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
@@ -157,24 +136,14 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
               <Col md={6}>
                 <Form.Group controlId="formColor">
                   <Form.Label>Color</Form.Label>
-                  <Field
-                    type="text"
-                    name="color"
-                    className="form-control"
-
-                  />
+                  <Field type="text" name="color" className="form-control" />
                   <ErrorMessage name="color" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formStockQuantity">
                   <Form.Label>Stock Quantity</Form.Label>
-                  <Field
-                    type="text"
-                    name="stockQuantity"
-                    className="form-control"
-
-                  />
+                  <Field type="number" name="stockQuantity" className="form-control" />
                   <ErrorMessage name="stockQuantity" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
@@ -185,24 +154,14 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
               <Col md={6}>
                 <Form.Group controlId="formPurchasePrice">
                   <Form.Label>Purchase Price</Form.Label>
-                  <Field
-                    type="text"
-                    name="purchasePrice"
-                    className="form-control"
-
-                  />
+                  <Field type="number" name="purchasePrice" className="form-control" />
                   <ErrorMessage name="purchasePrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formMarketPrice">
                   <Form.Label>Market Price</Form.Label>
-                  <Field
-                    type="text"
-                    name="marketPrice"
-                    className="form-control"
-
-                  />
+                  <Field type="number" name="marketPrice" className="form-control" />
                   <ErrorMessage name="marketPrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
@@ -213,39 +172,44 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
               <Col md={6}>
                 <Form.Group controlId="formSellingPrice">
                   <Form.Label>Selling Price</Form.Label>
-                  <Field
-                    type="text"
-                    name="sellingPrice"
-                    className="form-control"
-                  />
+                  <Field type="number" name="sellingPrice" className="form-control" />
                   <ErrorMessage name="sellingPrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formOrigin">
                   <Form.Label>Origin</Form.Label>
-                  <Field
-                    type="text"
-                    name="origin"
-                    className="form-control"
-
-                  />
+                  <Field type="text" name="origin" className="form-control" />
                   <ErrorMessage name="origin" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
+
             {/* RFID text and Entry Date & Time */}
             <Row className="mb-3">
+            <Col md={6}>
+                <Form.Group controlId="formDimensions">
+                  <Form.Label>Dimensions</Form.Label>
+                  <Field type="number" name="dimensions" className="form-control" />
+                  <ErrorMessage name="dimensions" component="div" className="text-danger" />
+                </Form.Group>
+              </Col>
               <Col md={6}>
                 <Form.Group controlId="formEntryDateTime">
                   <Form.Label>Entry Date & Time</Form.Label>
-                  <Field
-                    type="datetime-local"
-                    name="date"
-                    className="form-control"
-
-                  />
+                  <Field type="datetime-local" name="date" className="form-control" />
                   <ErrorMessage name="date" component="div" className="text-danger" />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            {/* RFID Number */}
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group controlId="formRfidNo">
+                  <Form.Label>RFID Number</Form.Label>
+                  <Field type="text" name="rfidNo" className="form-control" />
+                  <ErrorMessage name="rfidNo" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -261,36 +225,27 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
                       const validFiles = Array.from(files).filter((file) =>
                         ['image/jpeg', 'image/png'].includes(file.type)
                       );
-
-                      // Limit to 4 images
                       const updatedFiles = validFiles.slice(0, 4 - values.photos.length);
-
-                      // Store file names instead of URLs
                       const fileNames = updatedFiles.map(file => file.name);
-
-                      // Update the photos in form state with file names
                       setFieldValue('photos', [...values.photos, ...fileNames]);
                     }}
                     className="form-control"
                   />
-                  {/* Show Uploaded Images with Delete Icon */}
                   <div>
                     {values.photos && values.photos.length > 0 && (
                       <div className="image-preview-container">
                         {values.photos.map((photo, index) => (
                           <div key={index} className="image-preview-item">
-                            <span>{photo}</span> {/* Displaying image name */}
-
+                            <span>{photo}</span>
                             <button
                               type="button"
                               onClick={() => {
-                                // Remove the image from the array
                                 const updatedPhotos = values.photos.filter((_, i) => i !== index);
                                 setFieldValue('photos', updatedPhotos);
                               }}
                               className="btn btn-link text-danger mx-5"
                             >
-                              <FaTrash /> {/* Trash icon */}
+                              <FaTrash />
                             </button>
                           </div>
                         ))}
@@ -301,29 +256,11 @@ const GemstoneForm = ({ handleSave, handleClose }) => {
                 </Form.Group>
               </Col>
             </Row>
-            <Row>
-              <Col md={6}>
-                <Form.Group controlId="formRfidNo">
-                  <Form.Label>RFID Number</Form.Label>
-                  <Field
-                    type="text"
-                    name="rfidNo"
-                    className="form-control"
-
-                  />
-                  <ErrorMessage name="rfidNo" component="div" className="text-danger" />
-                </Form.Group>
-              </Col>
-            </Row>
 
             {/* Submit Button */}
-            <Row className="mb-3 mt-3">
+            <Row className="mb-3">
               <Col md={6}>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  disabled={isSubmitting}
-                >
+                <Button variant="primary" type="submit" disabled={isSubmitting}>
                   {isSubmitting ? 'Submitting...' : 'Submit'}
                 </Button>
               </Col>

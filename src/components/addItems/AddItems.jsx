@@ -6,17 +6,28 @@ import WatchForm from "./WatchForm";
 
 const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
   const [formData, setFormData] = useState(null);
+  const [gemstoneData, setGemstoneData] = useState(null);
 
   // Reset form data when item type changes
   useEffect(() => {
     setFormData(null);
+    setGemstoneData(null);
   }, [selectedItemType]);
 
   // Handle the save action
   const handleSaveData = (data) => {
-    console.log("Final data received in AddItems:", data);
-    handleSave(selectedItemType, data); // Pass selected type and data to parent
+    const finalData = {
+      ...data,
+      gemstone: gemstoneData, // Add gemstone data to final data
+    };
+    console.log("Final data received in AddItems:", finalData);
+    handleSave(selectedItemType, finalData); // Pass selected type and data to parent
     if (handleClose) handleClose(); // Close form after save, if handleClose exists
+  };
+
+  const handleGemstoneData = (gemstoneData) => {
+    setGemstoneData(gemstoneData);
+    console.log("Gemstone data received in AddItems:", gemstoneData);
   };
 
   const handleFormDataChange = (formData) => {
@@ -57,6 +68,7 @@ const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
             onFormDataChange={handleFormDataChange}
             handleSave={handleSaveData}
             handleClose={handleClose} // Pass handleClose to the form
+            handleGemstoneData={handleGemstoneData} // Pass gemstone handler to WatchForm
           />
         );
       default:
@@ -66,12 +78,35 @@ const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center mb-4">
-        {selectedItemType ? `Add New ${selectedItemType}` : "Add New Item"}
-      </h2>
-      <div className="card">
-        <div className="card-body">
-          {renderForm()}
+      <div className="position-relative">
+        <h2 className="text-center mb-4">
+          {selectedItemType ? `Add New ${selectedItemType}` : "Add New Item"}
+        </h2>
+        
+        {/* Close Button */}
+        <button
+          onClick={handleClose}
+          className="btn btn-danger position-absolute"
+          style={{
+            top: '1px',
+            right: '1px',
+            padding: '0', // Remove padding for a compact icon
+            fontSize: '40px', // Increase font size for a larger cross
+            backgroundColor: 'transparent', // Remove background
+            border: 'none', // Remove border
+            color: 'gray', // Set color to red for the close icon
+            cursor: 'pointer',
+          }}
+
+        >
+          &times; {/* Larger cross icon */}
+        </button>
+
+
+        <div className="card">
+          <div className="card-body">
+            {renderForm()}
+          </div>
         </div>
       </div>
     </div>
