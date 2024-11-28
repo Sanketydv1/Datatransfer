@@ -22,7 +22,7 @@ const validationSchema = Yup.object({
   photos: Yup.array().min(1, 'At least one photo is required'),
 });
 
-const WatchForm = ({ handleSave, handleClose }) => {                        
+const WatchForm = ({ handleSave, handleClose }) => {
   const initialValues = {
     items: '',
     purity: '',
@@ -37,38 +37,40 @@ const WatchForm = ({ handleSave, handleClose }) => {
     weight: '',
     photos: [],
     rfidNo: '',
-    color:'',
+    color: '',
     date: '',
     number: '',
     group: '',
     description: '',
     altcode: '',
   };
-   
+
   const [watchData, setWatchData] = useState({});
   const [gemstoneName, setGemstoneName] = useState(''); // Track selected gemstone name
 
 
+  // Inside WatchForm
   const handleGemstoneData = (gemstoneData, setFieldValue) => {
     console.log("gemstone data received in watch", gemstoneData);
-  
-    // Assuming gemstoneData has a field 'name' that holds the gemstone name
-    setGemstoneName(gemstoneData.name);  // Update gemstoneName here
-  
+
+    // Update the gemstoneName state
+    setGemstoneName(gemstoneData.gemstoneName); // Ensure the field matches the name in AddGemstoneForm
+
     // Optionally store gemstone data for further processing (if needed)
     setWatchData((prevData) => ({
       ...prevData,
       gemstoneDetails: gemstoneData,
     }));
-  
+
     // Reset the gemstone field to hide the modal
-    setFieldValue('gemstone', '');  // Reset gemstone field to close modal
+    setFieldValue('gemstone', ''); // Reset gemstone field to close modal
   };
-  
+
+
   const handleDeleteGemstone = () => {
     setGemstoneName(''); // Clear the gemstone name
   };
-  
+
   const handleSubmit = (values) => {
     console.log('Submitting watch data:', values);
     handleSave(values);
@@ -78,7 +80,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
   const handleCloseModal = (setFieldValue) => {
     setFieldValue('gemstone', ''); // Reset gemstone selection
   };
-   
+
   return (
     <div className="dynamic-fields">
 
@@ -89,7 +91,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
       >
         {({ isSubmitting, setFieldValue, values }) => (
           <FormikForm>
-             <Row className="mb-3">
+            <Row className="mb-3">
               <Col md={6}>
                 <Form.Group controlId="formnumber">
                   <Form.Label>Number</Form.Label>
@@ -109,6 +111,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
               </Col>
             </Row>
 
+
             {/* Description and AltCode */}
             <Row className="mb-3">
               <Col md={6}>
@@ -124,7 +127,8 @@ const WatchForm = ({ handleSave, handleClose }) => {
                 </Form.Group>
               </Col>
             </Row>
-            {/* Watch Name and Item Type */}
+
+            {/* Description and AltCode */}
             <Row className="mb-3">
               <Col md={6}>
                 <Form.Group controlId="formGemstoneName">
@@ -148,18 +152,19 @@ const WatchForm = ({ handleSave, handleClose }) => {
 
                   {/* Display the selected gemstone name with delete button */}
                   {gemstoneName && (
-                    <div className="gemstone-selected">
-                      <span>{gemstoneName}</span> {/* Display gemstone name */}
+                    <div className="gemstone-selected mt-2">
+                      <span className="badge bg-success">{gemstoneName}</span> {/* Display gemstone name */}
                       <button
                         type="button"
                         onClick={handleDeleteGemstone}
-                        className="btn btn-link text-danger mx-5"
+                        className="btn btn-link text-danger mx-2"
                       >
                         <FaTrash /> {/* Trash icon */}
                       </button>
                     </div>
                   )}
                 </Form.Group>
+
               </Col>
             </Row>
 
@@ -188,7 +193,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
                     type="text"
                     name="purity"
                     className="form-control" />
-                    <ErrorMessage name="purity" component="div" className="text-danger" />
+                  <ErrorMessage name="purity" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -219,7 +224,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
                     type="text"
                     name="weight"
                     className="form-control" />
-                    <ErrorMessage name="weight" component="div" className="text-danger" />
+                  <ErrorMessage name="weight" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -229,13 +234,13 @@ const WatchForm = ({ handleSave, handleClose }) => {
                     type="text"
                     name="stockQuantity"
                     className="form-control" />
-                    <ErrorMessage name="stockQuantity" component="div" className="text-danger" />
+                  <ErrorMessage name="stockQuantity" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
 
             <Row className="mb-3">
-              
+
               <Col md={6}>
                 <Form.Group controlId="formPurchasePrice">
                   <Form.Label>Market Price</Form.Label>
@@ -243,7 +248,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
                     type="text"
                     name="marketPrice"
                     className="form-control" />
-                    <ErrorMessage name="marketPrice" component="div" className="text-danger" />
+                  <ErrorMessage name="marketPrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -253,10 +258,10 @@ const WatchForm = ({ handleSave, handleClose }) => {
                     type="text"
                     name="purchasePrice"
                     className="form-control" />
-                    <ErrorMessage name="purchasePrice" component="div" className="text-danger" />
+                  <ErrorMessage name="purchasePrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
-              </Row>
+            </Row>
 
             {/* Purchase Price, Selling Price */}
             <Row className="mb-3">
@@ -267,7 +272,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
                     type="text"
                     name="sellingPrice"
                     className="form-control" />
-                    <ErrorMessage name="sellingPrice" component="div" className="text-danger" />
+                  <ErrorMessage name="sellingPrice" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -277,7 +282,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
                     type="text"
                     name="origin"
                     className="form-control" />
-                    <ErrorMessage name="origin" component="div" className="text-danger" />
+                  <ErrorMessage name="origin" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>
@@ -291,7 +296,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
                     type="datetime-local"
                     name="date"
                     className="form-control" />
-                    <ErrorMessage name="date" component="div" className="text-danger" />
+                  <ErrorMessage name="date" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -357,7 +362,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
                     type="text"
                     name="rfidNo"
                     className="form-control" />
-                    <ErrorMessage name="rfidNo" component="div" className="text-danger" />
+                  <ErrorMessage name="rfidNo" component="div" className="text-danger" />
                 </Form.Group>
               </Col>
             </Row>

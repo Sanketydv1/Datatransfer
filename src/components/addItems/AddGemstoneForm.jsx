@@ -30,13 +30,12 @@ const AddGemstoneForm = ({ handleGemstoneSubmit }) => {
           shape: '',
         }}
         validationSchema={validationSchema}
-        
         onSubmit={(values, { resetForm }) => {
-          console.log("Addgemstone data is submitted ",values)
           handleGemstoneSubmit(values); // Send gemstone data to parent  
           resetForm(); // Clear form
           alert('Gemstone successfully added!');
         }}
+
       >
         {({ isSubmitting }) => (
           <FormikForm>
