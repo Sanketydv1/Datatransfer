@@ -29,7 +29,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
     origin: '',
     metal: '',
     size: '',
-    gemstone: '', // Track if Gemstone or Rudraksh is selected
+    otheritems: '', 
     purchasePrice: '',
     marketPrice: '',
     sellingPrice: '',
@@ -46,34 +46,37 @@ const WatchForm = ({ handleSave, handleClose }) => {
   };
 
   const [watchData, setWatchData] = useState({});
-  const [gemstoneName, setGemstoneName] = useState(''); // Track selected gemstone name
+  const [gemstones, setGemstones] = useState([]); // Track selected gemstones
 
 
   // Inside WatchForm
   const handleGemstoneData = (gemstoneData, setFieldValue) => {
-    console.log("gemstone data received in watch", gemstoneData);
+    console.log("Data recieved", gemstoneData);
 
-    // Update the gemstoneName state
-    setGemstoneName(gemstoneData.gemstoneName); // Ensure the field matches the name in AddGemstoneForm
+
+    setGemstones((prevGemstones) => [...prevGemstones, gemstoneData.gemstoneName]);
 
     // Optionally store gemstone data for further processing (if needed)
-    setWatchData((prevData) => ({
-      ...prevData,
-      gemstoneDetails: gemstoneData,
-    }));
+    setWatchData((prevData) => ({ ...prevData, gemstoneDetails: [...(prevData.gemstoneDetails || []), gemstoneData], }));
 
     // Reset the gemstone field to hide the modal
     setFieldValue('gemstone', ''); // Reset gemstone field to close modal
   };
 
+  const handleDeleteGemstone = (gemstoneName) => {
+    setGemstones((prevGemstones) => prevGemstones.filter((name) => name !== gemstoneName));
 
-  const handleDeleteGemstone = () => {
-    setGemstoneName(''); // Clear the gemstone name
+    setWatchData((prevData) => ({ ...prevData, gemstoneDetails: (prevData.gemstoneDetails || []).filter((gem) => gem.gemstoneName !== gemstoneName), }));
   };
 
   const handleSubmit = (values) => {
-    console.log('Submitting watch data:', values);
-    handleSave(values);
+    // Combine the gemstone details with the form values
+    const formData = {
+      ...values,
+      gemstoneDetails: watchData.gemstoneDetails || [], // Add gemstone details if available
+    };
+    console.log('Submitting combined data:', formData);
+    handleSave(formData);
     handleClose();
   };
 
@@ -81,12 +84,13 @@ const WatchForm = ({ handleSave, handleClose }) => {
     setFieldValue('gemstone', ''); // Reset gemstone selection
   };
 
+
   return (
     <div className="dynamic-fields">
 
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
         {({ isSubmitting, setFieldValue, values }) => (
@@ -140,27 +144,34 @@ const WatchForm = ({ handleSave, handleClose }) => {
               <Col md={6}>
                 <Form.Group controlId="formgemstone">
                   <Form.Label>Gemstone</Form.Label>
-                  <div className="btn-group" role="group">
-                    <button
-                      type="button"
-                      className="btn btn-outline-secondary form-control"
-                      onClick={() => setFieldValue('gemstone', 'gemstone')}
-                    >
-                      Gemstone
-                    </button>
-                  </div>
+                  <Field
+                    as="select"
+                    name="otheritems"
+                    className="form-control"
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
+                      setFieldValue('gemstone', selectedValue); // Update the gemstone field when option is selected
+                    }}
+                  >
+                    <option value="">Select Gemstone</option>
+                    <option value="gemstone">Gemstone</option> {/* Trigger opening of Gemstone modal */}
+                  </Field>
 
                   {/* Display the selected gemstone name with delete button */}
-                  {gemstoneName && (
+                  {gemstones.length > 0 && (
                     <div className="gemstone-selected mt-2">
-                      <span className="badge bg-success">{gemstoneName}</span> {/* Display gemstone name */}
-                      <button
-                        type="button"
-                        onClick={handleDeleteGemstone}
-                        className="btn btn-link text-danger mx-2"
-                      >
-                        <FaTrash /> {/* Trash icon */}
-                      </button>
+                      {gemstones.map((gemstoneName, index) => (
+                        <div key={index} className="d-flex align-items-center">
+                          <span className="badge bg-success me-2">{gemstoneName}</span>
+                          < button
+                            type="button"
+                            onClick={() => handleDeleteGemstone(gemstoneName)}
+                            className="btn btn-link text-danger mx-2"
+                          >
+                            <FaTrash /> {/* Trash icon */}
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </Form.Group>
@@ -370,7 +381,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
             {/* Modal for Gemstone */}
             <Modal
               show={values.gemstone === 'gemstone'}
-              onHide={() => setFieldValue('gemstone', '')}
+              onHide={() => setFieldValue('gemstone', '')} // Close modal when selecting a different option
             >
               <Modal.Header closeButton>
                 <Modal.Title>Gemstone Form</Modal.Title>
@@ -384,6 +395,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
               </Modal.Body>
             </Modal>
 
+
             {/* Submit Button */}
             <Row className="mb-3">
               <Col md={6}>
@@ -396,7 +408,7 @@ const WatchForm = ({ handleSave, handleClose }) => {
           </FormikForm>
         )}
       </Formik>
-    </div>
+    </div >
   );
 };
 

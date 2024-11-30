@@ -75,6 +75,8 @@ const Items = () => {
       srno: inventory.length + 1,
       types: type,
       photos: data.photos, // Store URLs (addresses) instead of actual files
+      gemstoneDetails: data.gemstoneDetails , // Include gemstone details when available
+      rudrakshDetails: data.rudrakshDetails , // Include gemstone details when available
     };
 
     setInventory([...inventory, newItem]);
@@ -116,81 +118,97 @@ const Items = () => {
     if (!currentItem) return null;
 
     const renderDetails = (item, editable = false) => {
-      const entries = Object.entries(item).filter(([key]) => key !== "gemstoneDetails");
-      return (
-        <Row>
-          {entries.map(([key, value], index) => (
-            <Col md={6} className="mb-3" key={index}>
-              {editable ? (
-                <Form.Group>
-                  <Form.Label>{key.charAt(0).toUpperCase() + key.slice(1)}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={value}
-                    onChange={(e) => setCurrentItem({ ...currentItem, [key]: e.target.value })}
-                  />
-                </Form.Group>
-              ) : (
-                <>
-                  <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value}
-                </>
-              )}
-            </Col>
-          ))}
-        </Row>
-      );
+        const entries = Object.entries(item).filter(([key]) => key !== "gemstoneDetails" && key !== "rudrakshDetails");
+        return (
+            <Row>
+                {entries.map(([key, value], index) => (
+                    <Col md={4} className="mb-3" key={index}>
+                        {editable ? (
+                            <Form.Group>
+                                <Form.Label>{key.charAt(0).toUpperCase() + key.slice(1)}</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={value}
+                                    onChange={(e) => setCurrentItem({ ...currentItem, [key]: e.target.value })}
+                                />
+                            </Form.Group>
+                        ) : (
+                            <>
+                                <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value}
+                            </>
+                        )}
+                    </Col>
+                ))}
+            </Row>
+        );
     };
 
-    const renderGemstoneDetails = (details, editable = false) => {
-      if (!details) return null;
-      const entries = Object.entries(details);
-      return (
-        <>
-          <h5 className="mt-4">Gemstone/Rudraksh Details</h5>
-          <Row>
-            {entries.map(([key, value], index) => (
-              <Col md={6} className="mb-3" key={index}>
-                {editable ? (
-                  <Form.Group>
-                    <Form.Label>{key.charAt(0).toUpperCase() + key.slice(1)}</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={value}
-                      onChange={(e) =>
-                        setCurrentItem({
-                          ...currentItem,
-                          gemstoneDetails: { ...currentItem.gemstoneDetails, [key]: e.target.value }
-                        })
-                      }
-                    />
-                  </Form.Group>
-                ) : (
-                  <>
-                    <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value}
-                  </>
-                )}
-              </Col>
-            ))}
-          </Row>
-        </>
-      );
+    const renderModaldetails = (details, editable = false, type = 'gemstoneDetails') => {
+        if (!details) return null;
+
+        // Check if details is an array and map through it
+        if (Array.isArray(details)) {
+            return (
+                <>
+                    <h5 className="mt-4">{type === 'gemstoneDetails' ? 'Gemstone Details' : 'Rudraksh Details'}</h5>
+                    {details.map((detail, index) => (
+                        <Row key={index}>
+                            {Object.entries(detail).map(([key, value]) => (
+                                <Col md={4} className="mb-3" key={key}>
+                                    {editable ? (
+                                        <Form.Group>
+                                            <Form.Label>{key.charAt(0).toUpperCase() + key.slice(1)}</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                value={value}
+                                                onChange={(e) =>
+                                                    setCurrentItem((prevItem) => ({
+                                                        ...prevItem,
+                                                        [type]: {
+                                                            ...prevItem[type],
+                                                            [key]: e.target.value,
+                                                        },
+                                                    }))
+                                                }
+                                            />
+                                        </Form.Group>
+                                    ) : (
+                                        <>
+                                            <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value}
+                                        </>
+                                    )}
+                                </Col>
+                            ))}
+                        </Row>
+                    ))}
+                </>
+            );
+        }
+
+        return null;
     };
 
     return isEditMode ? (
       <Form>
+        {/* Render editable fields */}
         {renderDetails(currentItem, true)}
-        {renderGemstoneDetails(currentItem.gemstoneDetails, true)}
+        {renderModaldetails(currentItem.gemstoneDetails, true, 'gemstoneDetails')}
+        {renderModaldetails(currentItem.rudrakshDetails, true, 'rudrakshDetails ')}
         <Button variant="primary" onClick={handleSaveEdit}>
           Save
         </Button>
       </Form>
     ) : (
       <>
+        {/* Render non-editable fields */}
         {renderDetails(currentItem)}
-        {renderGemstoneDetails(currentItem.gemstoneDetails)}
+        {renderModaldetails(currentItem.gemstoneDetails, false, 'gemstoneDetails')}
+        {renderModaldetails(currentItem.rudrakshDetails, false, 'rudrakshDetails')}
       </>
     );
-  };
+  }    
+
+    
 
   const renderTable = (data) => {
     return (

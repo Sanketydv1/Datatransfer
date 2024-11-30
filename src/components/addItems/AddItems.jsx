@@ -6,29 +6,32 @@ import WatchForm from "./WatchForm";
 
 const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
   const [formData, setFormData] = useState(null);
-  const [gemstoneData, setGemstoneData] = useState(null);
-
-  // Reset form data when item type changes
-  useEffect(() => {
-    setFormData(null);
-    setGemstoneData(null);
-  }, [selectedItemType]);
+  // // Reset form data when item type changes
+  // useEffect(() => {
+  //   setFormData(null);
+  //   setGemstoneData(null);
+  //   setRudrakshData(null);
+  // }, [selectedItemType]);
 
   // Handle the save action
   const handleSaveData = (data) => {
     const finalData = {
       ...data,
-      gemstone: gemstoneData, // Add gemstone data to final data
     };
     console.log("Final data received in AddItems:", finalData);
     handleSave(selectedItemType, finalData); // Pass selected type and data to parent
     if (handleClose) handleClose(); // Close form after save, if handleClose exists
   };
 
-  const handleGemstoneData = (gemstoneData) => {
-    setGemstoneData(gemstoneData);
-    console.log("Gemstone data received in AddItems:", gemstoneData);
-  };
+  // const handleGemstoneData = (gemstoneData) => {
+  //   setGemstoneData(gemstoneData);
+  //   console.log("Gemstone data received in AddItems:", gemstoneData);
+  // };
+  // const handleRudrakshData = (gemstoneData) => {
+  //   setRudrakshData(gemstoneData);
+  //   console.log("Rudraksh data received in AddItems:", rudrakshData);
+  // };
+  
 
   const handleFormDataChange = (formData) => {
     setFormData(formData);
@@ -52,6 +55,7 @@ const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
             onFormDataChange={handleFormDataChange}
             handleSave={handleSaveData}
             handleClose={handleClose} // Pass handleClose to the form
+           
           />
         );
       case "Rudraksh":
@@ -68,7 +72,7 @@ const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
             onFormDataChange={handleFormDataChange}
             handleSave={handleSaveData}
             handleClose={handleClose} // Pass handleClose to the form
-            handleGemstoneData={handleGemstoneData} // Pass gemstone handler to WatchForm
+            // handleGemstoneData={handleGemstoneData} // Pass gemstone handler to WatchForm
           />
         );
       default:
@@ -82,7 +86,7 @@ const AddItems = ({ handleSave, selectedItemType, handleClose }) => {
         <h2 className="text-center mb-4">
           {selectedItemType ? `Add New ${selectedItemType}` : "Add New Item"}
         </h2>
-        
+
         {/* Close Button */}
         <button
           onClick={handleClose}
